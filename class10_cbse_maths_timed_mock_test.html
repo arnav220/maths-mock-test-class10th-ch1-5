@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class 10 CBSE Maths Mock Test — Chapters 1–5</title>
+<style>
+:root{--ink:#172033;--muted:#64748b;--line:#dbe2ea;--paper:#fff;--bg:#f3f6fb;--accent:#2457c5;--accent2:#e8efff;--warn:#a33b22;--good:#14734a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:18px}
+header,.panel,.question,.result-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 3px 12px #18294b08}
+h1{font-size:clamp(1.45rem,3vw,2.1rem);line-height:1.2;margin:0 0 8px}h2{font-size:1.2rem;margin:0 0 12px}p{margin:7px 0}.muted{color:var(--muted);font-size:.94rem}
+.rules{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pill{background:var(--accent2);color:#173d91;border-radius:999px;padding:5px 10px;font-size:.88rem}
+.sticky{position:sticky;top:0;z-index:5;background:#f3f6fbf2;padding:8px 0 12px;backdrop-filter:blur(8px)}
+.timerbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+#timer{font-size:1.75rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.03em}#timer.warning{color:var(--warn)}
+.progress{height:7px;background:#e3e8f0;border-radius:99px;overflow:hidden;margin-top:10px}.progress>div{height:100%;width:100%;background:var(--accent);transition:width .3s}
+button{font:inherit;font-weight:650;border:1px solid var(--line);border-radius:10px;padding:10px 15px;cursor:pointer;background:#fff;color:var(--ink)}
+button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:12px}.grid button{padding:7px 2px;font-size:.9rem}.grid button.done{background:#e1f4e9;border-color:#8bc8a7}.grid button.current{outline:2px solid var(--accent)}
+.question h3{font-size:1.04rem;margin:0 0 12px}.qmeta{font-size:.82rem;color:var(--muted);margin-bottom:8px}.options{display:grid;gap:8px}.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}.opt:has(input:checked){border-color:var(--accent);background:#f0f5ff}.opt input{margin-top:5px;accent-color:var(--accent)}
+.actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.hidden{display:none!important}.notice{padding:12px;border-radius:10px;background:#fff5dc;color:#754c00;margin-top:12px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line)}th{font-size:.9rem;color:var(--muted)}
+.score{font-size:2rem;font-weight:850}.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:12px}.stat strong{display:block;font-size:1.35rem}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:12px}
+@media(max-width:600px){.wrap{padding:10px}.panel,.question,.result-card,header{padding:15px}.statgrid{grid-template-columns:repeat(2,1fr)}.timerbar{padding:10px}.grid{grid-template-columns:repeat(5,minmax(0,1fr))}#timer{font-size:1.5rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Class 10 CBSE Mathematics Mock Test</h1>
+  <p class="muted">NCERT Chapters 1–5 · Real Numbers, Polynomials, Pair of Linear Equations, Quadratic Equations, Arithmetic Progressions</p>
+  <div class="rules"><span class="pill">50 MCQs</span><span class="pill">60 minutes</span><span class="pill">Maximum 100 marks</span><span class="pill">Negative marking</span></div>
+  <p><strong>Marking:</strong> +2 correct · −0.5 incorrect · 0 unanswered.</p>
+  <p class="muted">Your answers stay in this browser page; this file does not send them to anyone. Keep this tab open while attempting the test.</p>
+  <button class="primary" id="startBtn">Start test</button>
+  <button id="resetBtn">Reset test</button>
+  <div id="startNote" class="notice">The 60-minute timer starts when you press “Start test”. You can answer questions in any order. At 00:00, the test submits automatically.</div>
+</header>
+<div id="testArea" class="hidden">
+  <div class="sticky">
+    <div class="timerbar">
+      <div><div class="muted">TIME REMAINING</div><div id="timer" role="timer" aria-live="off">60:00</div></div>
+      <div style="text-align:right"><div id="answeredCount"><strong>0 / 50</strong> answered</div><div class="muted">Question palette</div></div>
+    </div>
+    <div class="progress"><div id="progressFill"></div></div>
+    <div class="grid" id="palette"></div>
+  </div>
+  <div id="questions"></div>
+  <div class="panel actions">
+    <button id="submitBtn" class="primary">Submit test</button>
+    <span class="muted" style="align-self:center">Submitting ends the test and shows your results.</span>
+  </div>
+</div>
+<div id="results" class="hidden"></div>
+<footer>Practice test for learning and self-assessment · No account or internet connection required after saving this file.</footer>
+</div>
+<script>
+const bank = [
+/* Chapter 1: Real Numbers */
+{ch:1,q:"The HCF of 135 and 225 is:",o:["15","25","45","75"],a:2},
+{ch:1,q:"The prime factorisation of 540 is:",o:["2² × 3³ × 5","2³ × 3² × 5","2² × 3² × 5²","2 × 3³ × 5²"],a:0},
+{ch:1,q:"If HCF(a,b) = 12 and ab = 4320, then LCM(a,b) is:",o:["180","240","360","520"],a:2},
+{ch:1,q:"Which fraction has a terminating decimal expansion?",o:["7/45","13/160","11/42","17/90"],a:1},
+{ch:1,q:"For any prime p greater than 3, p² − 1 is divisible by:",o:["8 only, never by 3","24","12 but not 8","5"],a:1},
+{ch:1,q:"The decimal expansion of 77/250 is:",o:["Terminating","Non-terminating recurring","Non-terminating non-recurring","An integer"],a:0},
+{ch:1,q:"The HCF of 96 and 404 is:",o:["2","4","8","12"],a:1},
+{ch:1,q:"If two positive integers are coprime, their HCF is:",o:["0","−1","1","Their product"],a:2},
+{ch:1,q:"Which of the following is irrational?",o:["√49","√(18)/√2","3√2","0.125"],a:2},
+{ch:1,q:"Euclid’s division lemma states that for positive integers a and b, there exist unique integers q and r such that:",o:["a = bq + r, 0 ≤ r < b","a = br + q, 0 ≤ q < b","b = aq + r, 0 ≤ r < a","a = b + q + r"],a:0},
+/* Chapter 2: Polynomials */
+{ch:2,q:"If α and β are the zeroes of x² − 5x + 6, then α + β equals:",o:["−5","5","6","−6"],a:1},
+{ch:2,q:"A quadratic polynomial whose zeroes are −1 and 5 is:",o:["x² − 4x − 5","x² + 4x − 5","x² − 6x + 5","x² + 6x − 5"],a:0},
+{ch:2,q:"If 3 is a zero of x² + kx − 12, then k is:",o:["1","−1","3","−3"],a:0},
+{ch:2,q:"For a quadratic polynomial ax² + bx + c, with zeroes α and β (a ≠ 0), αβ equals:",o:["−b/a","b/a","c/a","−c/a"],a:2},
+{ch:2,q:"If the zeroes of x² − 7x + k are reciprocals of each other, then k is:",o:["−1","0","1","7"],a:2},
+{ch:2,q:"If α + β = 3 and αβ = 1, then α³ + β³ equals:",o:["18","21","24","27"],a:0},
+{ch:2,q:"If p(x) = x² − 4x + 1, then p(2 + √3) equals:",o:["−1","1","2","0"],a:3},
+{ch:2,q:"A polynomial with zeroes −3 and −4 is x² + 7x + 12. Its value at x = 0 is:",o:["−7","7","12","−12"],a:2},
+{ch:2,q:"If one zero of 2x² − 7x + 3 is 3, the other zero is:",o:["1/2","−1/2","3/2","−3/2"],a:0},
+{ch:2,q:"If α and β are zeroes of x² + 5x + 6, then α²β + αβ² equals:",o:["−30","30","11","−11"],a:0},
+/* Chapter 3: Pair of Linear Equations */
+{ch:3,q:"For 2x + 3y = 7 and 4x + ky = 15 to have no solution, k must be:",o:["6","3","−6","15/7"],a:0},
+{ch:3,q:"The pair 3x − 2y = 7 and 6x − 4y = 14 has:",o:["No solution","Exactly one solution","Infinitely many solutions","Exactly two solutions"],a:2},
+{ch:3,q:"If x + y = 7 and xy = 10, then x² + y² equals:",o:["29","39","49","59"],a:0},
+{ch:3,q:"Solve: 2x + 3y = 12 and 3x − 2y = 5. The value of x is:",o:["2","3","4","5"],a:1},
+{ch:3,q:"If 5x + 2y = 11 and 10x + ky = 22 represent the same line, k equals:",o:["2","4","5","10"],a:1},
+{ch:3,q:"The pair x + 2y = 5 and 2x + ky = 10 has infinitely many solutions when k is:",o:["2","3","4","5"],a:2},
+{ch:3,q:"If 2x + y = 11 and x − y = 1, then x equals:",o:["3","4","5","6"],a:1},
+{ch:3,q:"For which value of k do 3x + 2y = 8 and 6x + ky = 26 have a unique solution?",o:["4","−4","Any real value except 4","Only 0"],a:2},
+{ch:3,q:"The equations 2x + 4y = 8 and x + 2y = 5 have:",o:["A unique solution","No solution","Infinitely many solutions","Exactly two solutions"],a:1},
+{ch:3,q:"If x/2 + y/3 = 2 and x/3 + y/2 = 2, then x + y is:",o:["12/5","24/5","5","6"],a:1},
+/* Chapter 4: Quadratic Equations */
+{ch:4,q:"The roots of x² − 8x + 15 = 0 are:",o:["1 and 15","3 and 5","−3 and −5","2 and 7"],a:1},
+{ch:4,q:"The equation x² + kx + 16 = 0 has equal roots when k is:",o:["8 only","−8 only","±8","±4"],a:2},
+{ch:4,q:"The discriminant of 2x² − 3x + 1 = 0 is:",o:["1","−1","9","17"],a:0},
+{ch:4,q:"If the roots of x² − 10x + k = 0 are in the ratio 1:2, then k is:",o:["25/2","200/9","50/3","100/3"],a:1},
+{ch:4,q:"The equation (x − 2)(x + 3) = 10 is equivalent to:",o:["x² + x − 16 = 0","x² − x − 16 = 0","x² + x + 4 = 0","x² − x + 4 = 0"],a:0},
+{ch:4,q:"If x² = 49, then x equals:",o:["7 only","−7 only","±7","49"],a:2},
+{ch:4,q:"The roots of 6x² − x − 2 = 0 are:",o:["2/3 and −1/2","−2/3 and 1/2","1/3 and −1","−1/3 and 1"],a:0},
+{ch:4,q:"The equation x² + 4x + c = 0 has real and distinct roots when:",o:["c < 4","c = 4","c > 4","c ≤ 4"],a:0},
+{ch:4,q:"If one root of x² − (m + 2)x + 2m = 0 is 2, then the other root is:",o:["m","2m","m + 2","2"],a:0},
+{ch:4,q:"The product of the roots of 3x² − 7x − 6 = 0 is:",o:["−2","2","−7/3","7/3"],a:0},
+/* Chapter 5: Arithmetic Progressions */
+{ch:5,q:"The common difference of the AP 4, 9, 14, 19, … is:",o:["4","5","9","14"],a:1},
+{ch:5,q:"In an AP, a = 4 and d = 3. The 10th term is:",o:["28","30","31","34"],a:2},
+{ch:5,q:"Which term of the AP 7, 11, 15, … is 99?",o:["23rd","24th","25th","26th"],a:1},
+{ch:5,q:"In an AP, the 5th term is 18 and the 9th term is 30. The first term is:",o:["3","6","9","12"],a:1},
+{ch:5,q:"The sum of the first 15 terms of an AP with first term 2 and common difference 4 is:",o:["420","450","465","480"],a:1},
+{ch:5,q:"Three numbers in AP have sum 21 and product 315. The numbers are:",o:["3, 7, 11","5, 7, 9","1, 7, 13","4, 7, 10"],a:1},
+{ch:5,q:"How many terms of the AP 5, 9, 13, … have sum 560?",o:["14","15","16","17"],a:2},
+{ch:5,q:"If the nth term of an AP is aₙ = 3n − 2, the sum of the first 25 terms is:",o:["900","925","950","975"],a:1},
+{ch:5,q:"If the 4th term of an AP is 11 and the 15th term is 44, its 20th term is:",o:["56","59","62","65"],a:1},
+{ch:5,q:"The sum of the first 10 terms of the AP 20, 17, 14, … is:",o:["55","60","65","70"],a:2}
+];
+const chapterNames={1:"Real Numbers",2:"Polynomials",3:"Pair of Linear Equations in Two Variables",4:"Quadratic Equations",5:"Arithmetic Progressions"};
+let answers=Array(50).fill(null), started=false, finished=false, endTime=null, interval=null, current=0;
+const $=id=>document.getElementById(id);
+function render(){
+ const holder=$("questions"); holder.innerHTML="";
+ bank.forEach((item,i)=>{
+  const sec=document.createElement("section");sec.className="question";sec.id="q-"+i;
+  const meta=document.createElement("div");meta.className="qmeta";meta.textContent=`Question ${i+1} · Chapter ${item.ch}: ${chapterNames[item.ch]}`;
+  const h=document.createElement("h3");h.textContent=`${i+1}. ${item.q}`;
+  const opts=document.createElement("div");opts.className="options";
+  item.o.forEach((label,j)=>{
+   const lab=document.createElement("label");lab.className="opt";
+   const input=document.createElement("input");input.type="radio";input.name="q"+i;input.value=j;input.checked=answers[i]===j;input.disabled=!started||finished;
+   input.addEventListener("change",()=>{answers[i]=j;updateStatus();updatePalette();});
+   const span=document.createElement("span");span.textContent=String.fromCharCode(65+j)+". "+label;
+   lab.append(input,span);opts.append(lab);
+  });
+  sec.append(meta,h,opts);holder.append(sec);
+ });
+ updatePalette();updateStatus();
+}
+function updatePalette(){
+ const p=$("palette");p.innerHTML="";
+ bank.forEach((_,i)=>{const b=document.createElement("button");b.textContent=i+1;if(answers[i]!==null)b.classList.add("done");if(i===current)b.classList.add("current");b.disabled=!started||finished;b.addEventListener("click",()=>{current=i;$("q-"+i).scrollIntoView({behavior:"smooth",block:"start"});updatePalette();});p.append(b);});
+}
+function updateStatus(){
+ const n=answers.filter(x=>x!==null).length;$("answeredCount").innerHTML=`<strong>${n} / 50</strong> answered`;
+ $("progressFill").style.width=(n/50*100)+"%";
+}
+function startTest(){
+ if(started||finished)return;started=true;endTime=Date.now()+3600000;
+ $("startBtn").disabled=true;$("startNote").classList.add("hidden");$("testArea").classList.remove("hidden");
+ render();tick();interval=setInterval(tick,250);
+}
+function tick(){
+ if(!started||finished)return;
+ const sec=Math.max(0,Math.ceil((endTime-Date.now())/1000));
+ const m=Math.floor(sec/60),s=sec%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+ $("timer").classList.toggle("warning",sec<=300);
+ if(sec<=0){finishTest(true);}
+}
+function finishTest(auto=false){
+ if(finished)return;
+ if(!started){alert("Press Start test before submitting.");return;}
+ finished=true;clearInterval(interval);
+ document.querySelectorAll("#questions input").forEach(x=>x.disabled=true);
+ $("submitBtn").disabled=true;$("startBtn").disabled=true;
+ let correct=0,wrong=0,blank=0,score=0;
+ const chapter={1:{c:0,w:0,b:0,score:0},2:{c:0,w:0,b:0,score:0},3:{c:0,w:0,b:0,score:0},4:{c:0,w:0,b:0,score:0},5:{c:0,w:0,b:0,score:0}};
+ bank.forEach((q,i)=>{
+  const ch=chapter[q.ch];
+  if(answers[i]===null){blank++;ch.b++}
+  else if(answers[i]===q.a){correct++;score+=2;ch.c++;ch.score+=2}
+  else{wrong++;score-=0.5;ch.w++;ch.score-=0.5}
+ });
+ let raw=correct*2-wrong*0.5;
+ const percent=raw/100*100;
+ const result=$("results");result.classList.remove("hidden");
+ let rows=Object.keys(chapter).map(k=>{let c=chapter[k];return `<tr><td>Chapter ${k}: ${chapterNames[k]}</td><td>${c.c}</td><td>${c.w}</td><td>${c.b}</td><td>${c.score.toFixed(1)} / 20</td></tr>`}).join("");
+ result.innerHTML=`<div class="result-card"><h2>${auto?"Time is up — test submitted automatically":"Test submitted"}</h2><p class="muted">Your answers have been scored using +2 for correct, −0.5 for incorrect, and 0 for unanswered.</p><div class="score">${raw.toFixed(1)} / 100</div><p>${percent.toFixed(1)}% of maximum marks</p><div class="statgrid"><div class="stat"><span class="muted">Correct</span><strong>${correct}</strong></div><div class="stat"><span class="muted">Incorrect</span><strong>${wrong}</strong></div><div class="stat"><span class="muted">Unanswered</span><strong>${blank}</strong></div></div></div>
+ <div class="result-card"><h2>Chapter-wise performance</h2><div style="overflow-x:auto"><table><thead><tr><th>Chapter</th><th>Correct</th><th>Wrong</th><th>Blank</th><th>Marks</th></tr></thead><tbody>${rows}</tbody></table></div><p class="muted">Maximum per chapter: 20 marks. Percentage is calculated against 100 maximum marks; a negative raw score can occur with negative marking.</p></div>
+ <div class="result-card"><h2>Review answers</h2><p class="muted">Correct options are shown below for review.</p>${bank.map((q,i)=>`<div style="padding:10px 0;border-bottom:1px solid var(--line)"><strong>Q${i+1}.</strong> ${q.q}<br><span class="${answers[i]===q.a?'':'muted'}">Your answer: ${answers[i]===null?"Unanswered":String.fromCharCode(65+answers[i])+" — "+q.o[answers[i]]}</span><br><span style="color:var(--good)">Correct: ${String.fromCharCode(65+q.a)} — ${q.o[q.a]}</span></div>`).join("")}</div>`;
+ result.scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("startBtn").addEventListener("click",startTest);
+$("submitBtn").addEventListener("click",()=>{if(confirm("Submit your test now? You cannot change answers after submission."))finishTest(false)});
+$("resetBtn").addEventListener("click",()=>{if(started&&!finished&&!confirm("Reset the test? Your current answers will be lost."))return;clearInterval(interval);answers=Array(50).fill(null);started=false;finished=false;endTime=null;current=0;$("startBtn").disabled=false;$("submitBtn").disabled=false;$("testArea").classList.add("hidden");$("results").classList.add("hidden");$("startNote").classList.remove("hidden");$("timer").textContent="60:00";$("timer").classList.remove("warning");$("progressFill").style.width="0%";});
+render();
+</script>
+</body>
+</html>
